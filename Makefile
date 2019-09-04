@@ -6,7 +6,7 @@ default: dev
 
 .PHONY: install
 install:
-	python setup.py install
+	python3 setup.py install
 
 .PHONY: ops
 ops:
@@ -14,9 +14,9 @@ ops:
 
 .PHONY: dev
 dev:
-	python setup.py develop $(DEV_USER_FLAG)
+	python3 setup.py develop $(DEV_USER_FLAG)
 
 .PHONY: clean
 clean:
-	python setup.py develop --uninstall $(DEV_USER_FLAG)
+	python3 setup.py develop --uninstall $(DEV_USER_FLAG)
 	rm -rf build
