@@ -177,6 +177,32 @@ def main(args):
             out_when_no_box=args.out_when_no_box
         )
 
+        # save bounding box information to a file
+        im_basename = os.path.splitext(os.path.basename(im_name))[0]
+        box_results = os.path.join(args.output_dir,
+                                   '{}.csv'.format(im_basename))
+        box_fh = open(box_results, 'w')
+
+        # convert class bounding boxes, segments, keypoints
+        boxes, segms, keypoints, classes = vis_utils.convert_from_cls_format(
+            cls_boxes, cls_segms, cls_keyps
+        )
+        for i in range(len(boxes)):
+            left = int(round(boxes[i, 0]))
+            top = int(round(boxes[i, 1]))
+            right = int(round(boxes[i, 2]))
+            bottom = int(round(boxes[i, 3]))
+
+            score = boxes[i, -1]
+            if score < args.thresh:
+                continue
+
+            class_name = dummy_coco_dataset.classes[classes[i]]
+            box_fh.write('{},{:.2f},{},{},{},{}\n'.format(
+                class_name, score, left, top, right, bottom))
+
+        box_fh.close()
+
 
 if __name__ == '__main__':
     workspace.GlobalInit(['caffe2', '--caffe2_log_level=0'])
