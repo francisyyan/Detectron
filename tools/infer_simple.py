@@ -141,8 +141,9 @@ def main(args):
         im_list = [args.im_or_folder]
 
     for i, im_name in enumerate(im_list):
+        im_basename = os.path.splitext(os.path.basename(im_name))[0]
         out_name = os.path.join(
-            args.output_dir, '{}'.format(os.path.basename(im_name) + '.' + args.output_ext)
+            args.output_dir, '{}'.format(im_basename + '.' + args.output_ext)
         )
         logger.info('Processing {} -> {}'.format(im_name, out_name))
         im = cv2.imread(im_name)
@@ -178,7 +179,6 @@ def main(args):
         )
 
         # save bounding box information to a file
-        im_basename = os.path.splitext(os.path.basename(im_name))[0]
         box_results = os.path.join(args.output_dir,
                                    '{}.csv'.format(im_basename))
         box_fh = open(box_results, 'w')
